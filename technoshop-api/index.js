@@ -1,5 +1,12 @@
 // импорт стандартных библиотек Node.js
-const {existsSync, mkdirSync, readFileSync, writeFileSync, writeFile, unlink} = require('fs');
+const {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  writeFileSync,
+  writeFile,
+  unlink,
+} = require("fs");
 const { createServer } = require("http");
 const path = require("path");
 
@@ -107,9 +114,8 @@ function makeGoodsFromData(data, id) {
     price: data.price,
     image: data.image ? data.image : data.imagesave,
     category: data.category,
-    display: data.display ?? '',
+    display: data.display ?? "",
   };
-
 
   // проверяем, все ли данные корректные и заполняем объект ошибок, которые нужно отдать клиенту
   if (!goods.title) {
@@ -124,8 +130,6 @@ function makeGoodsFromData(data, id) {
   if (!goods.category) {
     errors.push({ field: "category", message: "Не указана категория товара" });
   }
-
-
 
   if (!goods.image) {
     errors.push({ field: "image", message: "Нет данных о изображении" });
@@ -205,9 +209,13 @@ function createGoods(data) {
   const newItem = makeGoodsFromData(data, id);
   newItem.id = id;
 
-  writeFileSync(DB_FILE, JSON.stringify([...getGoodsList({nopage: true}), newItem]), {
-    encoding: "utf8",
-  });
+  writeFileSync(
+    DB_FILE,
+    JSON.stringify([...getGoodsList({ nopage: true }), newItem]),
+    {
+      encoding: "utf8",
+    }
+  );
   return newItem;
 }
 
@@ -225,29 +233,32 @@ function getCategory() {
 }
 
 function updateGoods(itemId, data) {
-  const goods = getGoodsList({nopage: true});
-  const itemIndex = goods.findIndex(({id}) => id === itemId);
-  if (itemIndex === -1) throw new ApiError(404, {message: 'Goods Not Found'});
-  Object.assign(goods[itemIndex], makeGoodsFromData({...goods[itemIndex], ...data}, itemId));
-  writeFileSync(DB_FILE, JSON.stringify(goods), {encoding: 'utf8'});
+  const goods = getGoodsList({ nopage: true });
+  const itemIndex = goods.findIndex(({ id }) => id === itemId);
+  if (itemIndex === -1) throw new ApiError(404, { message: "Goods Not Found" });
+  Object.assign(
+    goods[itemIndex],
+    makeGoodsFromData({ ...goods[itemIndex], ...data }, itemId)
+  );
+  writeFileSync(DB_FILE, JSON.stringify(goods), { encoding: "utf8" });
   return goods[itemIndex];
 }
 
 function deleteGoods(itemId) {
-  const goods = getGoodsList({nopage: true});
-  const itemIndex = goods.findIndex(({id}) => id === itemId);
+  const goods = getGoodsList({ nopage: true });
+  const itemIndex = goods.findIndex(({ id }) => id === itemId);
 
-  if (itemIndex === -1) throw new ApiError(404, {message: 'Goods Not Found'});
-  const item = goods.find(({id}) => id === itemId);
-  unlink(`./${item.image}`, function(err){
+  if (itemIndex === -1) throw new ApiError(404, { message: "Goods Not Found" });
+  const item = goods.find(({ id }) => id === itemId);
+  unlink(`./${item.image}`, function (err) {
     if (err) {
-        console.log(err);
+      console.log(err);
     } else {
-        console.log("Файл удалён");
+      console.log("Файл удалён");
     }
-});
+  });
   goods.splice(itemIndex, 1);
-  writeFileSync(DB_FILE, JSON.stringify(goods), {encoding: 'utf8'});
+  writeFileSync(DB_FILE, JSON.stringify(goods), { encoding: "utf8" });
   return {};
 }
 

@@ -8,6 +8,6 @@ export const store = configureStore({
     goods: GoodsSlice,
     category: CategorySlice,
     filter: FilterSlice,
-    modal:ModalSlice
+    modal: ModalSlice,
   },
 });

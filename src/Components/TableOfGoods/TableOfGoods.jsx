@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchGoods, fetchDeleteGoods } from "../../redux/GoodsSlice";
 import { GoodsItem } from "./GoodsItem";
 import { Spinner } from "../Spinner/Spinner";
+import { setActiveGoods } from "../../redux/ModalSlice";
 
 function TableOfGoods() {
   const { goods, loading } = useSelector((state) => state.goods);
@@ -21,14 +22,14 @@ function TableOfGoods() {
   useEffect(() => {
     dispatch(fetchGoods());
   }, []);
-  function handleTableClicker(e){ 
-    if(e.target.parentNode.tagName==='TR'){
-      dispatch(setActiveGoods(e.target.parentNode.dataset.id))
+  function handleTableClicker(e) {
+    if (e.target.parentNode.tagName === "TR") {
+      dispatch(setActiveGoods(e.target.parentNode.dataset.id));
     }
-    if(e.target.parentNode.classList.contains('btn-delete')){
-      dispatch(fetchDeleteGoods(e.target.parentNode.dataset.id)) 
+    if (e.target.parentNode.classList.contains("btn-delete")) {
+      dispatch(fetchDeleteGoods(e.target.parentNode.dataset.id));
     }
-    return
+    return;
   }
   return (
     <div className="table-responsive">
@@ -71,7 +72,10 @@ function TableOfGoods() {
               <th></th>
             </tr>
           </thead>
-          <tbody className="table-group-divider table-goods" onClick={handleTableClicker}>
+          <tbody
+            className="table-group-divider table-goods"
+            onClick={handleTableClicker}
+          >
             {filteredGoods.map((item) => {
               return <GoodsItem key={item.id} {...item} />;
             })}
