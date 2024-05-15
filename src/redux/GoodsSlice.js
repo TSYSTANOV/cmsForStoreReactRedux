@@ -8,6 +8,25 @@ export const fetchGoods = createAsyncThunk("goods/fetch", async () => {
   return data;
 });
 
+export const fetchCreateGoods = createAsyncThunk('goods\create',async(newGoods, thunkApi)=>{
+  const data = await fetch('http://localhost:3024/api/goods', {
+    method:'POST',
+    body:JSON.stringify(newGoods)
+  }).then(res=>res.ok)
+  if(data){
+    thunkApi.dispatch(fetchGoods())
+  }
+})
+export const fetchDeleteGoods = createAsyncThunk('goods\delete',async(id, thunkApi)=>{
+  const data = await fetch(`http://localhost:3024/api/goods/${id}`, {
+    method:'DELETE',
+  }).then(res=>res.ok)
+
+  if(data){
+    thunkApi.dispatch(fetchGoods())
+  }
+})
+
 const GoodsSlice = createSlice({
   name: "goods",
   initialState: {

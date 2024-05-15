@@ -7,7 +7,7 @@ function GoodsItem({ id, category, price, title }) {
       <td>{category}</td>
       <td className="text-end">{price} &#8381;</td>
       <td className="d-flex">
-        <button className="btn-table btn-delete">
+        <button className="btn-table btn-delete" data-id={id}>
           <MdDeleteOutline style={{ width: "30px", height: "30px" }} />
         </button>
       </td>
